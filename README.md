@@ -1,6 +1,6 @@
 # yt-extract
 
-Fetch YouTube video metadata via the [YouTube Data API v3](https://developers.google.com/youtube/v3/docs) and print a table.
+Fetch YouTube video metadata via the [YouTube Data API v3](https://developers.google.com/youtube/v3/docs) and print a table (Markdown by default).
 
 ## Requirements
 
@@ -42,7 +42,7 @@ yt-extract
 
 ## Output
 
-The default table includes: id, title, publication date, channel title, view count, like count, comment count, duration.
+By default the script prints a Markdown table (id, title, publication date, channel title, view count, like count, comment count, duration), suitable for pasting into docs or viewing in a Markdown renderer. Use `--format grid` to print an ASCII grid instead.
 
 Videos that are private, deleted, or not found are reported on stderr; the table includes only successfully fetched videos.
 

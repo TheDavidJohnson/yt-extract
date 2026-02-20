@@ -157,6 +157,16 @@ DEFAULT_TABLE_COLUMNS = [
 ]
 
 
+def _escape_pipes_for_markdown(rows: list[dict]) -> list[dict]:
+    """Return a copy of rows with each string cell value having '|' escaped as '\\|' for Markdown tables."""
+    out = []
+    for row in rows:
+        out.append(
+            {k: (v.replace("|", "\\|") if isinstance(v, str) else v) for k, v in row.items()}
+        )
+    return out
+
+
 def items_to_rows(items: list[dict], columns: list[str] | None = None) -> list[dict]:
     """Build table rows from API items using the given column ids (default: DEFAULT_TABLE_COLUMNS)."""
     columns = columns or DEFAULT_TABLE_COLUMNS
@@ -194,6 +204,12 @@ def main() -> None:
         nargs="*",
         help="One or more YouTube video IDs (or leave empty to be prompted)",
     )
+    parser.add_argument(
+        "--format",
+        choices=["grid", "markdown"],
+        default="markdown",
+        help="Output table format: markdown (default) or ASCII grid",
+    )
     args = parser.parse_args()
     video_ids = args.video_ids
     if not video_ids:
@@ -217,7 +233,10 @@ def main() -> None:
     rows = items_to_rows(items)
     if not rows:
         sys.exit(1)
-    print(tabulate(rows, headers="keys", tablefmt="grid"))
+    tablefmt = "pipe" if args.format == "markdown" else "grid"
+    if tablefmt == "pipe":
+        rows = _escape_pipes_for_markdown(rows)
+    print(tabulate(rows, headers="keys", tablefmt=tablefmt))
 
 
 if __name__ == "__main__":

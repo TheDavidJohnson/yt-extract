@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "yt-extract"
-version = "0.1.0"
+version = "0.1.1"
 description = "Fetch YouTube video metadata via the Data API v3 and print a table."
 readme = "README.md"
 license = { text = "MIT" }
