@@ -39,12 +39,11 @@ def fetch_videos(api_key: str, video_ids: list[str]) -> list[dict]:
     for i in range(0, len(video_ids), BATCH_SIZE):
         chunk = video_ids[i : i + BATCH_SIZE]
         params = {
-            "key": api_key,
             "part": PARTS,
             "id": ",".join(chunk),
         }
         url = f"{API_BASE}?{urlencode(params)}"
-        req = Request(url)
+        req = Request(url, headers={"X-Goog-Api-Key": api_key})
         try:
             with urlopen(req) as resp:
                 data = resp.read().decode()
